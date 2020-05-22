@@ -126,6 +126,12 @@ public struct RequestResult: Codable {
     case success
     case message
   }
+
+  public init(requestSeq: Int, success: Bool, message: String? = nil) {
+    self.requestSeq = requestSeq
+    self.success = success
+    self.message = message
+  }
 }
 
 public struct Capabilities: Codable {
@@ -134,7 +140,7 @@ public struct Capabilities: Codable {
   public var supportsConditionalBreakpoints: Bool?
   public var supportsHitConditionalBreakpoints: Bool?
   public var supportsEvaluateForHovers: Bool?
-//    var exceptionBreakpointFilters: ExceptionBreakpointsFilter[]?
+  public var exceptionBreakpointFilters: [ExceptionBreakpointsFilter]?
   public var supportsStepBack: Bool?
   public var supportsSetVariable: Bool?
   public var supportsRestartFrame: Bool?
@@ -143,7 +149,7 @@ public struct Capabilities: Codable {
   public var supportsCompletionsRequest: Bool?
   public var completionTriggerCharacters: [String]?
   public var supportsModulesRequest: Bool?
-//    var additionalModuleColumns: ColumnDescriptor[]?
+  public var additionalModuleColumns: [ColumnDescriptor]?
   public var supportedChecksumAlgorithms: [ChecksumAlgorithm]?
   public var supportsRestartRequest: Bool?
   public var supportsExceptionOptions: Bool?
@@ -162,6 +168,74 @@ public struct Capabilities: Codable {
   public var supportsCancelRequest: Bool?
   public var supportsBreakpointLocationsRequest: Bool?
   public var supportsClipboardContext: Bool?
+
+  public init(supportsConfigurationDoneRequest: Bool? = nil,
+              supportsFunctionBreakpoints: Bool? = nil,
+              supportsConditionalBreakpoints: Bool? = nil,
+              supportsHitConditionalBreakpoints: Bool? = nil,
+              supportsEvaluateForHovers: Bool? = nil,
+              exceptionBreakpointFilters: [ExceptionBreakpointsFilter]? = nil,
+              supportsStepBack: Bool? = nil,
+              supportsSetVariable: Bool? = nil,
+              supportsRestartFrame: Bool? = nil,
+              supportsGotoTargetsRequest: Bool? = nil,
+              supportsStepInTargetsRequest: Bool? = nil,
+              supportsCompletionsRequest: Bool? = nil,
+              completionTriggerCharacters: [String]? = nil,
+              supportsModulesRequest: Bool? = nil,
+              additionalModuleColumns: [ColumnDescriptor]? = nil,
+              supportedChecksumAlgorithms: [ChecksumAlgorithm]? = nil,
+              supportsRestartRequest: Bool? = nil,
+              supportsExceptionOptions: Bool? = nil,
+              supportsValueFormattingOptions: Bool? = nil,
+              supportsExceptionInfoRequest: Bool? = nil,
+              supportTerminateDebuggee: Bool? = nil,
+              supportsDelayedStackTraceLoading: Bool? = nil,
+              supportsLoadedSourcesRequest: Bool? = nil,
+              supportsLogPoints: Bool? = nil,
+              supportsTerminateThreadsRequest: Bool? = nil,
+              supportsSetExpression: Bool? = nil,
+              supportsTerminateRequest: Bool? = nil,
+              supportsDataBreakpoints: Bool? = nil,
+              supportsReadMemoryRequest: Bool? = nil,
+              supportsDisassembleRequest: Bool? = nil,
+              supportsCancelRequest: Bool? = nil,
+              supportsBreakpointLocationsRequest: Bool? = nil,
+              supportsClipboardContext: Bool? = nil) {
+    self.supportsConfigurationDoneRequest = supportsConfigurationDoneRequest
+    self.supportsFunctionBreakpoints = supportsFunctionBreakpoints
+    self.supportsConditionalBreakpoints = supportsConditionalBreakpoints
+    self.supportsHitConditionalBreakpoints = supportsHitConditionalBreakpoints
+    self.supportsEvaluateForHovers = supportsEvaluateForHovers
+    self.exceptionBreakpointFilters = exceptionBreakpointFilters
+    self.supportsStepBack = supportsStepBack
+    self.supportsSetVariable = supportsSetVariable
+    self.supportsRestartFrame = supportsRestartFrame
+    self.supportsGotoTargetsRequest = supportsGotoTargetsRequest
+    self.supportsStepInTargetsRequest = supportsStepInTargetsRequest
+    self.supportsCompletionsRequest = supportsCompletionsRequest
+    self.completionTriggerCharacters = completionTriggerCharacters
+    self.supportsModulesRequest = supportsModulesRequest
+    self.additionalModuleColumns = additionalModuleColumns
+    self.supportedChecksumAlgorithms = supportedChecksumAlgorithms
+    self.supportsRestartRequest = supportsRestartRequest
+    self.supportsExceptionOptions = supportsExceptionOptions
+    self.supportsValueFormattingOptions = supportsValueFormattingOptions
+    self.supportsExceptionInfoRequest = supportsExceptionInfoRequest
+    self.supportTerminateDebuggee = supportTerminateDebuggee
+    self.supportsDelayedStackTraceLoading = supportsDelayedStackTraceLoading
+    self.supportsLoadedSourcesRequest = supportsLoadedSourcesRequest
+    self.supportsLogPoints = supportsLogPoints
+    self.supportsTerminateThreadsRequest = supportsTerminateThreadsRequest
+    self.supportsSetExpression = supportsSetExpression
+    self.supportsTerminateRequest = supportsTerminateRequest
+    self.supportsDataBreakpoints = supportsDataBreakpoints
+    self.supportsReadMemoryRequest = supportsReadMemoryRequest
+    self.supportsDisassembleRequest = supportsDisassembleRequest
+    self.supportsCancelRequest = supportsCancelRequest
+    self.supportsBreakpointLocationsRequest = supportsBreakpointLocationsRequest
+    self.supportsClipboardContext = supportsClipboardContext
+  }
 }
 
 public typealias SetFunctionBreakpointsResponse = SetBreakpointsResponse
@@ -169,25 +243,50 @@ public typealias SetDataBreakpointsResponse = SetBreakpointsResponse
 
 public struct SetBreakpointsResponse: Codable {
   public var breakpoints: [Breakpoint]
+
+  public init(breakpoints: [Breakpoint]) {
+    self.breakpoints = breakpoints
+  }
 }
 
 public struct ThreadsResponse: Codable {
   public var threads: [Thread]
+
+  public init(threads: [Thread]) {
+    self.threads = threads
+  }
 }
 
 public struct StackTraceResponse: Codable {
   public var stackFrames: [StackFrame]
   public var totalFrames: Int?
+
+  public init(stackFrames: [StackFrame], totalFrames: Int? = nil) {
+    self.stackFrames = stackFrames
+    self.totalFrames = totalFrames
+  }
 }
 
 public struct ScopesResponse: Codable {
   public var scopes: [Scope]
+
+  public init(scopes: [Scope]) {
+    self.scopes = scopes
+  }
 }
 
 public struct VariablesResponse: Codable {
   public var variables: [Variable]
+
+  public init(variables: [Variable]) {
+    self.variables = variables
+  }
 }
 
 public struct ContinueResponse: Codable {
   public var allThreadsContinued: Bool?
+
+  public init(allThreadsContinued: Bool?) {
+    self.allThreadsContinued = allThreadsContinued
+  }
 }

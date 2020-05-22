@@ -53,6 +53,10 @@ public enum BreakpointReason: String, Codable {
 
 public struct BreakpointEvent: Codable {
   public var reason: BreakpointReason
+
+  public init(reason: BreakpointReason) {
+    self.reason = reason
+  }
 }
 
 public enum StopReason: String, Codable {
@@ -73,17 +77,42 @@ public struct StoppedEvent: Codable {
   public var preserveFocusHint: Bool?
   public var text: String?
   public var allThreadsStopped: Bool?
+
+  public init(reason: StopReason,
+              description: String? = nil,
+              threadId: Int? = nil,
+              preserveFocusHint: Bool? = nil,
+              text: String? = nil,
+              allThreadsStopped: Bool? = nil) {
+    self.reason = reason
+    self.description = description
+    self.threadId = threadId
+    self.preserveFocusHint = preserveFocusHint
+    self.text = text
+    self.allThreadsStopped = allThreadsStopped
+  }
 }
 
 public struct ContinuedEvent: Codable {
   public var threadId: Int
   public var allThreadsContinued: Bool?
+
+  public init(threadId: Int, allThreadsContinued: Bool? = nil) {
+    self.threadId = threadId
+    self.allThreadsContinued = allThreadsContinued
+  }
 }
 
 public struct ExitedEvent: Codable {
   public var exitCode: Int
+
+  public init(exitCode: Int) {
+    self.exitCode = exitCode
+  }
 }
 
 public struct TerminatedEvent: Codable {
 //  public var restart: Any
+  public init() {
+  }
 }

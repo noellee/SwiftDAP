@@ -97,10 +97,19 @@ public enum RequestMessage: MirroredEnum, Codable {
 public struct GotoArguments: Codable {
   public var threadId: Int
   public var targetId: Int
+
+  public init(threadId: Int, targetId: Int) {
+    self.threadId = threadId
+    self.targetId = targetId
+  }
 }
 
 public struct NextArguments: Codable {
   public var threadId: Int
+
+  public init(threadId: Int) {
+    self.threadId = threadId
+  }
 }
 
 public struct LaunchArguments: Codable {
@@ -111,6 +120,12 @@ public struct LaunchArguments: Codable {
   public var noDebug: Bool?
   public var __restart: String?
   public var extraArgs: [String: Any]
+
+  public init(noDebug: Bool? = nil, __restart: String? = nil, extraArgs: [String: Any] = [:]) {
+    self.noDebug = noDebug
+    self.__restart = __restart
+    self.extraArgs = extraArgs
+  }
 
   public init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -134,19 +149,42 @@ public struct SetBreakpointsArguments: Codable {
   public var breakpoints: [SourceBreakpoint]?
   public var lines: [Int]?
   public var sourceModified: Bool?
+
+  public init(source: Source,
+              breakpoints: [SourceBreakpoint]? = nil,
+              lines: [Int]? = nil,
+              sourceModified: Bool? = nil) {
+    self.source = source
+    self.breakpoints = breakpoints
+    self.lines = lines
+    self.sourceModified = sourceModified
+  }
 }
 
 public struct SetFunctionBreakpointsArguments: Codable {
   public var breakpoints: [FunctionBreakpoint]?
+
+  public init(breakpoints: [FunctionBreakpoint]? = nil) {
+    self.breakpoints = breakpoints
+  }
 }
 
 public struct SetExceptionBreakpointsArguments: Codable {
   public var filters: [String]
   public var exceptionOptions: [ExceptionOptions]?
+
+  public init(filters: [String], exceptionOptions: [ExceptionOptions]? = nil) {
+    self.filters = filters
+    self.exceptionOptions = exceptionOptions
+  }
 }
 
 public struct SetDataBreakpointsArguments: Codable {
   public var breakpoints: [DataBreakpoint]
+
+  public init(breakpoints: [DataBreakpoint]) {
+    self.breakpoints = breakpoints
+  }
 }
 
 public struct InitializeArguments: Codable {
@@ -162,6 +200,32 @@ public struct InitializeArguments: Codable {
   public var supportsRunInTerminalRequest: Bool?
   public var supportsMemoryReferences: Bool?
   public var supportsProgressReporting: Bool?
+
+  public init(clientID: String? = nil,
+              clientName: String? = nil,
+              adapterID: String,
+              locale: String? = nil,
+              linesStartAt1: Bool? = nil,
+              columnsStartAt1: Bool? = nil,
+              pathFormat: String? = nil,
+              supportsVariableType: Bool? = nil,
+              supportsVariablePaging: Bool? = nil,
+              supportsRunInTerminalRequest: Bool? = nil,
+              supportsMemoryReferences: Bool? = nil,
+              supportsProgressReporting: Bool? = nil) {
+    self.clientID = clientID
+    self.clientName = clientName
+    self.adapterID = adapterID
+    self.locale = locale
+    self.linesStartAt1 = linesStartAt1
+    self.columnsStartAt1 = columnsStartAt1
+    self.pathFormat = pathFormat
+    self.supportsVariableType = supportsVariableType
+    self.supportsVariablePaging = supportsVariablePaging
+    self.supportsRunInTerminalRequest = supportsRunInTerminalRequest
+    self.supportsMemoryReferences = supportsMemoryReferences
+    self.supportsProgressReporting = supportsProgressReporting
+  }
 }
 
 public struct StackTraceArguments: Codable {
@@ -169,10 +233,24 @@ public struct StackTraceArguments: Codable {
   public var startFrame: Int?
   public var levels: Int?
   public var format: StackFrameFormat?
+
+  public init(threadId: Int,
+              startFrame: Int? = nil,
+              levels: Int? = nil,
+              format: StackFrameFormat? = nil) {
+    self.threadId = threadId
+    self.startFrame = startFrame
+    self.levels = levels
+    self.format = format
+  }
 }
 
 public struct ScopesArguments: Codable {
   public var frameId: Int
+
+  public init(frameId: Int) {
+    self.frameId = frameId
+  }
 }
 
 public enum VariableFilter: String, Codable {
@@ -185,22 +263,52 @@ public struct VariablesArguments: Codable {
   public var start: Int?
   public var count: Int?
   public var format: ValueFormat?
+
+  public init(variablesReference: Int,
+              filter: VariableFilter? = nil,
+              start: Int? = nil,
+              count: Int? = nil,
+              format: ValueFormat? = nil) {
+    self.variablesReference = variablesReference
+    self.filter = filter
+    self.start = start
+    self.count = count
+    self.format = format
+  }
 }
 
 public struct DisconnectArguments: Codable {
   public var restart: Bool?
   public var terminateDebuggee: Bool?
+
+  public init(restart: Bool? = nil, terminateDebuggee: Bool? = nil) {
+    self.restart = restart
+    self.terminateDebuggee = terminateDebuggee
+  }
 }
 
 public struct ContinueArguments: Codable {
   public var threadId: Int
+
+  public init(threadId: Int) {
+    self.threadId = threadId
+  }
 }
 
 public struct StepInArguments: Codable {
   public var threadId: Int
   public var targetId: Int?
+
+  public init(threadId: Int, targetId: Int? = nil) {
+    self.threadId = threadId
+    self.targetId = targetId
+  }
 }
 
 public struct StepOutArguments: Codable {
   public var threadId: Int
+
+  public init(threadId: Int) {
+    self.threadId = threadId
+  }
 }
