@@ -3,12 +3,12 @@ import Foundation
 public typealias ProtocolMessageSender = (ProtocolMessage) -> Void
 
 public class DebugAdapter {
-  let logger: Logger?
-  let input: FileHandle
-  let output: FileHandle
-  var buffer: Data
-  var contentLength: Int
-  var messageHandler: ProtocolMessageHandler?
+  private let logger: Logger?
+  private let input: FileHandle
+  private let output: FileHandle
+  private var buffer: Data
+  private var contentLength: Int
+  private var messageHandler: ProtocolMessageHandler?
 
   public init(_ input: FileHandle = FileHandle.standardInput,
               _ output: FileHandle = FileHandle.standardOutput,
@@ -26,7 +26,7 @@ public class DebugAdapter {
     return self
   }
 
-  func send(_ message: ProtocolMessage) {
+  private func send(_ message: ProtocolMessage) {
     let encoder = JSONEncoder()
     let data = try! encoder.encode(message)
     let header = "Content-Length: \(data.count)\r\n\r\n".data(using: .utf8)!

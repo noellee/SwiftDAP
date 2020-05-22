@@ -1,3 +1,3 @@
 public protocol ProtocolMessageHandler {
-    func handle(message: ProtocolMessage)
+  func handle(message: ProtocolMessage)
 }
