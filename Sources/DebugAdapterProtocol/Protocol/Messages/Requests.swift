@@ -12,6 +12,7 @@ public enum RequestMessage: MirroredEnum, Codable {
   case stepOut(StepOutArguments)
   case stepBack(StepBackArguments)
   case `continue`(ContinueArguments)
+  case reverseContinue(ReverseContinueArguments)
   case initialize(InitializeArguments)
   case launch(_ args: LaunchArguments)
   case setBreakpoints(SetBreakpointsArguments)
@@ -35,6 +36,8 @@ public enum RequestMessage: MirroredEnum, Codable {
     case "stepBack": self = .stepBack(try container.decode(StepBackArguments.self, forKey: .arguments))
     case "stepOut": self = .stepOut(try container.decode(StepOutArguments.self, forKey: .arguments))
     case "continue": self = .continue(try container.decode(ContinueArguments.self, forKey: .arguments))
+    case "reverseContinue":
+      self = .reverseContinue(try container.decode(ReverseContinueArguments.self, forKey: .arguments))
     case "initialize": self = .initialize(try container.decode(InitializeArguments.self, forKey: .arguments))
     case "launch": self = .launch(try container.decode(LaunchArguments.self, forKey: .arguments))
     case "setBreakpoints":
@@ -70,6 +73,8 @@ public enum RequestMessage: MirroredEnum, Codable {
     case .stepOut(let args):
       try container.encode(args, forKey: .arguments)
     case .continue(let args):
+      try container.encode(args, forKey: .arguments)
+    case .reverseContinue(let args):
       try container.encode(args, forKey: .arguments)
     case .initialize(let args):
       try container.encode(args, forKey: .arguments)
@@ -294,6 +299,14 @@ public struct DisconnectArguments: Codable {
 }
 
 public struct ContinueArguments: Codable {
+  public var threadId: Int
+
+  public init(threadId: Int) {
+    self.threadId = threadId
+  }
+}
+
+public struct ReverseContinueArguments: Codable {
   public var threadId: Int
 
   public init(threadId: Int) {

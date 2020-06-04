@@ -12,6 +12,7 @@ public enum ResponseMessage: MirroredEnum, Codable {
   case stepOut(RequestResult)
   case stepBack(RequestResult)
   case `continue`(RequestResult, ContinueResponse)
+  case reverseContinue(RequestResult)
   case error(RequestResult)
   case initialize(RequestResult, Capabilities)
   case launch(RequestResult)
@@ -38,6 +39,7 @@ public enum ResponseMessage: MirroredEnum, Codable {
     case "stepBack": self = .stepIn(result)
     case "error": self = .error(result)
     case "continue": self = .continue(result, try container.decode(ContinueResponse.self, forKey: .body))
+    case "reverseContinue": self = .reverseContinue(result)
     case "initialize": self = .initialize(result, try container.decode(Capabilities.self, forKey: .body))
     case "launch": self = .launch(result)
     case "setBreakpoints":
@@ -111,6 +113,7 @@ public enum ResponseMessage: MirroredEnum, Codable {
          .stepIn(let result),
          .stepOut(let result),
          .stepBack(let result),
+         .reverseContinue(let result),
          .error(let result),
          .launch(let result),
          .disconnect(let result):
