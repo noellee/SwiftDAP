@@ -10,6 +10,7 @@ public enum ResponseMessage: MirroredEnum, Codable {
   case next(RequestResult)
   case stepIn(RequestResult)
   case stepOut(RequestResult)
+  case stepBack(RequestResult)
   case `continue`(RequestResult, ContinueResponse)
   case error(RequestResult)
   case initialize(RequestResult, Capabilities)
@@ -34,6 +35,7 @@ public enum ResponseMessage: MirroredEnum, Codable {
     case "next": self = .next(result)
     case "stepIn": self = .stepIn(result)
     case "stepOut": self = .stepOut(result)
+    case "stepBack": self = .stepIn(result)
     case "error": self = .error(result)
     case "continue": self = .continue(result, try container.decode(ContinueResponse.self, forKey: .body))
     case "initialize": self = .initialize(result, try container.decode(Capabilities.self, forKey: .body))
@@ -108,6 +110,7 @@ public enum ResponseMessage: MirroredEnum, Codable {
          .next(let result),
          .stepIn(let result),
          .stepOut(let result),
+         .stepBack(let result),
          .error(let result),
          .launch(let result),
          .disconnect(let result):
@@ -168,6 +171,7 @@ public struct Capabilities: Codable {
   public var supportsCancelRequest: Bool?
   public var supportsBreakpointLocationsRequest: Bool?
   public var supportsClipboardContext: Bool?
+  public var supportsSteppingGranularity: Bool?
 
   public init(supportsConfigurationDoneRequest: Bool? = nil,
               supportsFunctionBreakpoints: Bool? = nil,
@@ -201,7 +205,8 @@ public struct Capabilities: Codable {
               supportsDisassembleRequest: Bool? = nil,
               supportsCancelRequest: Bool? = nil,
               supportsBreakpointLocationsRequest: Bool? = nil,
-              supportsClipboardContext: Bool? = nil) {
+              supportsClipboardContext: Bool? = nil,
+              supportsSteppingGranularity: Bool? = nil) {
     self.supportsConfigurationDoneRequest = supportsConfigurationDoneRequest
     self.supportsFunctionBreakpoints = supportsFunctionBreakpoints
     self.supportsConditionalBreakpoints = supportsConditionalBreakpoints
@@ -235,6 +240,7 @@ public struct Capabilities: Codable {
     self.supportsCancelRequest = supportsCancelRequest
     self.supportsBreakpointLocationsRequest = supportsBreakpointLocationsRequest
     self.supportsClipboardContext = supportsClipboardContext
+    self.supportsSteppingGranularity = supportsSteppingGranularity
   }
 }
 

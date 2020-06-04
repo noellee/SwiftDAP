@@ -10,6 +10,7 @@ public enum RequestMessage: MirroredEnum, Codable {
   case next(NextArguments?)
   case stepIn(StepInArguments)
   case stepOut(StepOutArguments)
+  case stepBack(StepBackArguments)
   case `continue`(ContinueArguments)
   case initialize(InitializeArguments)
   case launch(_ args: LaunchArguments)
@@ -31,6 +32,7 @@ public enum RequestMessage: MirroredEnum, Codable {
     case "goto": self = .goto(try container.decodeIfPresent(GotoArguments.self, forKey: .arguments))
     case "next": self = .next(try container.decodeIfPresent(NextArguments.self, forKey: .arguments))
     case "stepIn": self = .stepIn(try container.decode(StepInArguments.self, forKey: .arguments))
+    case "stepBack": self = .stepBack(try container.decode(StepBackArguments.self, forKey: .arguments))
     case "stepOut": self = .stepOut(try container.decode(StepOutArguments.self, forKey: .arguments))
     case "continue": self = .continue(try container.decode(ContinueArguments.self, forKey: .arguments))
     case "initialize": self = .initialize(try container.decode(InitializeArguments.self, forKey: .arguments))
@@ -62,6 +64,8 @@ public enum RequestMessage: MirroredEnum, Codable {
     case .next(let args):
       try container.encode(args, forKey: .arguments)
     case .stepIn(let args):
+      try container.encode(args, forKey: .arguments)
+    case .stepBack(let args):
       try container.encode(args, forKey: .arguments)
     case .stepOut(let args):
       try container.encode(args, forKey: .arguments)
@@ -106,9 +110,11 @@ public struct GotoArguments: Codable {
 
 public struct NextArguments: Codable {
   public var threadId: Int
+  public var granularity: SteppingGranularity?
 
-  public init(threadId: Int) {
+  public init(threadId: Int, granularity: SteppingGranularity? = nil) {
     self.threadId = threadId
+    self.granularity = granularity
   }
 }
 
@@ -298,17 +304,31 @@ public struct ContinueArguments: Codable {
 public struct StepInArguments: Codable {
   public var threadId: Int
   public var targetId: Int?
+  public var granularity: SteppingGranularity?
 
-  public init(threadId: Int, targetId: Int? = nil) {
+  public init(threadId: Int, targetId: Int? = nil, granularity: SteppingGranularity? = nil) {
     self.threadId = threadId
     self.targetId = targetId
+    self.granularity = granularity
   }
 }
 
 public struct StepOutArguments: Codable {
   public var threadId: Int
+  public var granularity: SteppingGranularity?
 
-  public init(threadId: Int) {
+  public init(threadId: Int, granularity: SteppingGranularity? = nil) {
     self.threadId = threadId
+    self.granularity = granularity
+  }
+}
+
+public struct StepBackArguments: Codable {
+  public var threadId: Int
+  public var granularity: SteppingGranularity?
+
+  public init(threadId: Int, granularity: SteppingGranularity? = nil) {
+    self.threadId = threadId
+    self.granularity = granularity
   }
 }

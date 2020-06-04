@@ -364,3 +364,7 @@ public struct VariablePresentationHint: Codable {
     self.visibility = visibility
   }
 }
+
+public enum SteppingGranularity: String, Codable {
+  case statement, line, instruction
+}
